@@ -1,0 +1,163 @@
+---
+title: "Exam 3"
+author: "Antonio Tiu"
+date: "7/9/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Clear environment
+```{r}
+rm(list=ls())
+```
+
+# 2 Using tidycensus
+```{r}
+library(tidycensus)
+
+
+```
+
+
+# 3. Reshaping inequality_panel wide then using head to peak the data
+```{r}
+library()
+```
+
+
+# 4. Reshape ineqaulity_wide to long format
+```{r}
+
+```
+
+
+# 5. Showing that inequality_panel and inequality_long have the same data
+```{r}
+
+```
+
+
+# 6. Collapse inequality_long data frame by state
+```{r}
+
+```
+
+
+# 7. Produce map of the U.S that colors in the state polygons by their mean gini scores
+```{r}
+
+```
+
+
+# 8. Use WDI package to import data 
+```{r}
+
+```
+
+
+# 9. Deflate gdp_current to constant 2010 
+```{r}
+
+```
+
+
+# 10. What are the three main components and their subcomponents?
+The three main components of Shiny app are the "ui", "server", and "shinyApp". 
+
+# 11. Pull .pdf file
+```{r}
+library(pdftools)
+library(tidyverse)
+PDF <- pdf_text("usaid.pdf") %>%
+  readr::read_lines()
+```
+
+
+# 12. Convert text pulled from the .pdf to a data frame
+```{r}
+
+```
+
+
+# 13. Tokenize the data by word and remove stop words
+```{r}
+
+##mytext=mytext%>%
+ # unnest_tokens(word, text)
+
+# get rid of stop words
+#data(stop_words)
+
+#mytext <- mytext%>%
+ # anti_join(stop_words)
+
+```
+
+# 14. Figure out top 5 most used word 
+```{r}
+#frequency <- tidy_tweets%>%
+ # count(word, sort = TRUE)
+
+#frequency
+```
+
+
+# 15. Load Billboard Hot 100 webpage
+```{r}
+library(rvest)
+library(dplyr)
+
+hot100exam <- "https://www.billboard.com/charts/hot-100"
+hot100 <- read_html(hot100exam)
+hot100
+
+```
+
+
+# 16. Use rvest to obtain all of nodes in the webpage
+```{r}
+body_nodes <- hot100 %>%
+  html_node("body") %>%
+  html_children()
+body_nodes
+```
+
+
+
+# 17. Using Google Chrome to identify the necessary tags 
+```{r}
+
+rank <- hot100 %>% 
+  rvest::html_nodes('body') %>%
+  xml2:: xml_find_all("//span[contains(@class, 
+                      'chart-element__rank__number')]") %>%
+  rvest::html_text()
+
+artist <- hot100 %>% 
+  rvest::html_nodes('body') %>%
+  xml2:: xml_find_all("//span[contains(@class, 
+                      'chart-element__information__artist')]") %>%
+  rvest::html_text()
+  
+title <- hot100 %>% 
+  rvest::html_nodes('body') %>%
+  xml2:: xml_find_all("//span[contains(@class, 
+                      'chart-element__information__song')]") %>%
+  rvest::html_text()
+
+#last_week <- hot100 %>% 
+  #rvest::html_nodes('body') %>%
+  #xml2:: xml_find_all("//span[contains(@class, 
+           #           'chart-sorter__button font--semi-bold text--center text--uppercase')]") %>%
+ # rvest::html_text()
+
+chart_df <- data.frame(rank,artist,title)
+```
+
+# Link to Github repo
+https://github.com/antoniotiu21/exam3
+
+
