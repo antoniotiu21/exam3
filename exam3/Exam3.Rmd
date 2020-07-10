@@ -195,6 +195,7 @@ title <- hot100 %>%
 
 
 chart_df <- data.frame(rank,artist,title)
+
 ```
 
 # Link to Github repo
