@@ -18,19 +18,28 @@ rm(list=ls())
 ```{r}
 library(tidycensus)
 
+census_api_key("5e97ead132046e45d7523a868bab0829571d2f75")
+
+
+#inequality_panel
 
 ```
 
 
 # 3. Reshaping inequality_panel wide then using head to peak the data
 ```{r}
-library()
 ```
 
 
 # 4. Reshape ineqaulity_wide to long format
 ```{r}
-
+#long_data_frame <-
+ # wide_by_year%>%
+#  pivot_longer(cols =starts_with("year"),
+#  names_prefix = "year_",
+#  values_to = "current_amount",
+#  values_drop_na = FALSE)%>%
+#  filter(!(current_amount==0))
 ```
 
 
@@ -42,7 +51,11 @@ library()
 
 # 6. Collapse inequality_long data frame by state
 ```{r}
-
+#collapsed_data <-
+ # alldata%>%
+ # group_by(year, state_name)%>%
+ # summarize(across(where(is.numeric), sum))%>%
+ # sumselect(-c("transaction_id"))
 ```
 
 
@@ -60,7 +73,11 @@ library()
 
 # 9. Deflate gdp_current to constant 2010 
 ```{r}
-
+library(WDI)
+deflator_data =WDI(country = "all", indicator =c("NY.GDP.DEFL.ZS"),
+                   start = 2010,
+                   end = 2010,
+                   extra = FALSE, cache = NULL)
 ```
 
 
@@ -71,13 +88,42 @@ The three main components of Shiny app are the "ui", "server", and "shinyApp".
 ```{r}
 library(pdftools)
 library(tidyverse)
-PDF <- pdf_text("usaid.pdf") %>%
+library(dplyr)
+library(purrr)
+library(readr)
+
+GDP <- pdf_text("usaid.pdf")%>%
   readr::read_lines()
 ```
 
 
 # 12. Convert text pulled from the .pdf to a data frame
 ```{r}
+library(tm)
+#armeniatext <- function("usaid.pdf") {
+ 
+#  dat = readPDF(control=list(text="-layout"))(elem=list(uri=file), 
+                                     #         language="en", id="id1") 
+#  dat = c(as.character(dat))
+
+#  dat = dat[grep("^ {0,2}[0-9]{1,3}", dat)]
+
+#  dat = gsub("^ ?([0-9]{1,3}) ?", "\\1|", dat)
+#  dat = gsub("(, HVOL )","\\1 ", dat)
+#  dat = gsub(" {2,100}", "|", dat)
+
+#  excludeRows = lapply(gregexpr("\\|", dat), function(x) length(x)) != 6
+#  write(dat[excludeRows], "rowsToCheck.txt", append=TRUE)
+
+  
+# dat = dat[!excludeRows]
+
+ 
+#  dat = read.table(text=dat, sep="|", quote="", stringsAsFactors=FALSE)
+ # names(dat) = c("RowNum", "Reference Entity", "Sub-Index", "CLIP", 
+       #           "Reference Obligation", "CUSIP/ISIN", "Weighting")
+#  return(dat)
+#}
 
 ```
 
@@ -85,20 +131,19 @@ PDF <- pdf_text("usaid.pdf") %>%
 # 13. Tokenize the data by word and remove stop words
 ```{r}
 
-##mytext=mytext%>%
- # unnest_tokens(word, text)
+# armeniatext=armeniatext%>%
+# unnest_tokens(word, text)
 
-# get rid of stop words
 #data(stop_words)
 
-#mytext <- mytext%>%
+#armeniatext <- armeniatext%>%
  # anti_join(stop_words)
 
 ```
 
 # 14. Figure out top 5 most used word 
 ```{r}
-#frequency <- tidy_tweets%>%
+# frequency <- armeniatext%>%
  # count(word, sort = TRUE)
 
 #frequency
@@ -148,11 +193,6 @@ title <- hot100 %>%
                       'chart-element__information__song')]") %>%
   rvest::html_text()
 
-#last_week <- hot100 %>% 
-  #rvest::html_nodes('body') %>%
-  #xml2:: xml_find_all("//span[contains(@class, 
-           #           'chart-sorter__button font--semi-bold text--center text--uppercase')]") %>%
- # rvest::html_text()
 
 chart_df <- data.frame(rank,artist,title)
 ```
